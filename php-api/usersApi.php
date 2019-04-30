@@ -111,10 +111,10 @@
         }else{
             $response['error'][] = array('code',401);
         }
-        respond($response)
+        respond($response);
     }
     function updateUserPassword($email,$old_password,$new_password,$database){
-        global $response
+        global $response;
         if(authenticate($email, $old_password, $database)){
             $old = md5($old_password);
             $new = md5($new_password);
@@ -145,7 +145,7 @@
         //TODO: create php script for password reset 
         // need to verify an encryption string saved to datbase then sent in email to verify the email account
         // right now this just sends the email 
-        $link = 'https://fe41a14.online-server.cloud/emailrecovery.php?email=$email&v=$pword'
+        $link = 'https://fe41a14.online-server.cloud/emailrecovery.php?email=$email&v=$pword';
         $html_message = createEmail($link);
         sendEmail($email, 'Password Recovery', $html_message);
 

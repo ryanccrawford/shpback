@@ -2,7 +2,7 @@
 const walmartApiKey = 'yetbamnvuptfsnzehnsz99nr'
 const googleApiKey = 'AIzaSyDiaHiIDgafsFhfwb1XQBtKETZ1zdlrP_o'
 const shoppingListApiKey = 'vtctfddr677666rtfcghh'
-
+//---------------------------ENDPOINT OBJECTS---------------------------------
 var dataEnpoints = {
     createEndpoint: function (_endpoint,_action) {  
         return this.datahost + '/' + _endpoint + 'action=' + _action + '&' +'apiKey=' + this.apiKey
@@ -15,8 +15,6 @@ var dataEnpoints = {
     items: 'api.php?api=items&'
 
 }
-
-
 var walmartEnpoints = {
     createEndpoint: function (_endpoint) {
         var ep = ''
@@ -64,8 +62,8 @@ var walmart_lookUpObj = {
         return '?upc=' + upc + '&'
     }
 }
-
-function dataAddUser(_email,_password,_zip) {
+//---------------------------PHP API USER FUNCTIONS---------------------------
+function data_AddUser(_email,_password,_zip) {
    var endPoint = dataEnpoints.users
     var url = dataEnpoints.createEndpoint(endPoint, 'insert')
     var data = {
@@ -81,7 +79,7 @@ function dataAddUser(_email,_password,_zip) {
         addedUserEvent(response)
     });
 }
-function dataLogInUser(_email, _password) {
+function data_LogInUser(_email, _password) {
     var endPoint = dataEnpoints.users
     var url = walmartEnpoints.createEndpoint(endPoint, 'select', {
         email: _email,
@@ -94,6 +92,9 @@ function dataLogInUser(_email, _password) {
         isLoggedInEvent(response)
     });
 }
+
+
+//-----------------------------------EVENT HANDLERS-----------------------------
 function addedUserEvent(_data) {
     $.event.trigger({
         type: "addedUser",
@@ -118,11 +119,13 @@ function getsSearchItemEventHandel(_data) {
         message: _data
     });
 }
+//------------------------------------WALMART API FUNCTIONS---------------------------------
 
-//send this function an object like this:
-//{ids: ['23423','23443','23111386'...] } array of walmart item ids(Up to 20) or 
-//{ids: '23111386' }for a single id or
-// { upc: 'upcnumber' } for a upc code
+
+/** send this function an object like this:
+{ids: ['23423','23443','23111386'...] } array of walmart item ids(Up to 20) or 
+{ids: '23111386' }for a single id or
+{ upc: 'upcnumber' } for a upc code **/
 function walmart_GetItems(_item_ids) { 
     var item_ids = walmart_lookUpObj.createlookupString(_item_ids)
     var endPoint = walmartEnpoints.itemLookup(item_ids)
@@ -144,6 +147,7 @@ function walmart_SearchItems(_query) {
           getsSearchItemEventHandel(response)
       });
 }
+//TODO: NOT DONE
 function walmart_GetCategorys() {
      $.ajax({
          type: "GET",
@@ -152,6 +156,7 @@ function walmart_GetCategorys() {
 
      }));
 }
+//TODO: NOT DONE
 function walmart_GetItemPrice(_item_id) {
      $.ajax({
          type: "GET",
@@ -162,34 +167,15 @@ function walmart_GetItemPrice(_item_id) {
 
      }));
 }
-function AuthenticateUser(_user_email, _user_password) {
-     $.ajax({
-         type: "GET",
-         url: url
-     }).then(function (response) {
 
-     });
-    return session_key
-}
-function IsLoggedIn() {
-    var session_key = localStorage.getItem('session_key')
-
-    return function () {
-        $.ajax({
-            type: "GET",
-            url: url
-        }).then(function (response) {
-            
-        });
-    }
-}
-function UserId() { }
-
+//---------------------------------------GOOGLE MAP APIS------------------------------------------
+//TODO: NOT DONE
 var mapsApiKey = ''
+//TODO: NOT DONE
 var mapsEndpoints = {
     
 }
-
+//GOOGLE MAPS API REQUEST OBJECT
 var mapsApiRequest = function (_startLocation, _storeAddress, _method = 'DRIVING') {
     return {
         origin: _startLocation,
@@ -204,6 +190,7 @@ var mapsApiRequest = function (_startLocation, _storeAddress, _method = 'DRIVING
 //Test area
 $(document).ready(function () {
 
+    //EVENT HANDLERS 
     $(document).on('getWalmartItem', function (response) {
         console.log(response.message)
     })
@@ -214,13 +201,12 @@ $(document).ready(function () {
         console.log(response.message)
     })
 
-   walmart_SearchItems('eggs')
+    //FUNCTION TEST AREA
+    walmart_SearchItems('eggs')
 
-   walmart_GetItems({
+    walmart_GetItems({
         upc: '035000521019'
     })
-
-
 
     dataAddUser('ryanccrawford@live.com','123456','32792')
     

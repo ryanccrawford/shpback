@@ -11,6 +11,6 @@ function respond($data){
 require_once('database.php');
 require_once('paramaters.php');
 require_once('usersApi.php');
-require_once('listsApi.php')
+require_once('listsApi.php');
 
 
