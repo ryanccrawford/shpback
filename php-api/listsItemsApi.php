@@ -7,19 +7,19 @@
             $response['error'][] = array('message','not logged in');
         }else{
             $listid = $data->listid;
-            if($action === 'add_item' && $userid){
+            if($action === 'add_item'){
                 addItem($userid, $listid, $db);
             }
-            if($action === 'get_item' && $userid){
+            if($action === 'get_item'){
                 getItem($userid, $listid, $itemid, $db);
             }
-            if($action === 'get_items' && $userid){
+            if($action === 'get_items'){
                 getItems($userid, $listid, $db);
             }
-            if($action === 'remove_item' && $userid){
+            if($action === 'remove_item'){
                 removeItem($userid, $listid, $itemid, $db);
             }
-            if($action === 'remove_items' && $userid){
+            if($action === 'remove_items'){
                 removeItems($userid, $listid, $db);
             }  
         }

@@ -46,7 +46,7 @@ var walmartEnpoints = {
         } else {
             ep += _endpoint
         }
-        return this.walmartHost + '/' + ep + 'apiKey=' + this.apiKey
+        return this.walmartHost + '/' + ep + 'apiKey=' + this.apiKey + "&categoryId=976759"
     },
     walmartHost: 'http://api.walmartlabs.com/v1',
     'apiKey': walmartApiKey,
@@ -88,14 +88,14 @@ function data_AddUser(_email,_password,_zip) {
    var endPoint = dataEnpoints.users
     var url = dataEnpoints.createEndpoint(endPoint, 'insert')
     var data = {
-        email: _email,
-        password: _password,
-        zip: _zip
+        "email": _email,
+        "password": _password,
+        "zip": _zip
     }
     $.ajax({
         type: "POST",
         url: url,
-        data: data
+        data: JSON.stringify(data)
     }).then(function (response) {
         addedUserEventHandel(response)
     });
@@ -104,13 +104,13 @@ function data_LogInUser(_email, _password) {
     var endPoint = dataEnpoints.users
     var url = dataEnpoints.createEndpoint(endPoint, 'auth_user')
     var data = {
-        email: _email,
-        password: _password
+        "email": _email,
+        "password": _password
     }
     $.ajax({
         type: "POST",
         url: url,
-        data: data
+        data: JSON.stringify(data)
     }).then(function (response) {
         isLoggedInEventHandel(response)
     });
@@ -136,27 +136,27 @@ function data_GetLists(_userid) {
     var endPoint = dataEnpoints.lists
     var url = dataEnpoints.createEndpoint(endPoint, 'get_lists')
     var data = {
-        userid: _userid
+        "userid": _userid
     }
     $.ajax({
         type: "POST",
         url: url,
-        data: data
+        data: JSON.stringify(data)
     }).then(function (response) {
-        addListEventHandel(response)
+        getListsEventHandel(response)
     });
 }
 function data_RemoveList(_userid, _listid) {
     var endPoint = dataEnpoints.lists
     var url = dataEnpoints.createEndpoint(endPoint, 'remove_list')
     var data = {
-        userid: _userid,
-        listid: _listid
+        "userid": _userid,
+        "listid": _listid
     }
     $.ajax({
         type: "POST",
         url: url,
-        data: data
+        data: JSON.stringify(data)
     }).then(function (response) {
         removeListEventHandel(response)
  });
@@ -166,15 +166,15 @@ function data_AddItem(_userid, _itemname, _categoryid, _categoryname, _listid) {
     var endPoint = dataEnpoints.listItems
     var url = dataEnpoints.createEndpoint(endPoint, 'add_item')
     var data = {
-        userid: _userid,
-        categoryid: _categoryid,
-        categoryname: _categoryname,
-        listid: _listid
+        "userid": _userid,
+        "categoryid": _categoryid,
+        "categoryname": _categoryname,
+        "listid": _listid
     }
     $.ajax({
         type: "POST",
         url: url,
-        data: data
+        data: JSON.stringify(data)
     }).then(function (response) {
         addItemEventHandel(response)
     });
@@ -205,7 +205,7 @@ function data_RemoveItem(_userid, _itemid, _listid) {
     $.ajax({
         type: "POST",
         url: url,
-        data: data
+        data: JSON.stringify(data)
     }).then(function (response) {
         removeItemFromListEventHandel(response)
     });
@@ -301,10 +301,11 @@ function walmart_SearchItems(_query) {
       });
 }
 //SORT LIST----------------------------------------------------------------------------------------------------------
-function sortThatList() {
-    if (list.items.length > 1) {
-        list.items.sort(compareItems);
+function sortThatList(_listofItems) {
+    if (_listofItems.items.length > 1) {
+        _listofItems.items.sort(compareItems);
     }
+    return _listofItems
 }
 function compareItems(itema, itemb) {
     if (itema.category < itemb.category) {
@@ -339,14 +340,9 @@ var mapsApiRequest = function (_startLocation, _storeAddress, _method = 'DRIVING
 
 //Test area
 $(document).ready(function () {
- currentUser.email = localStorage.get('email')
- currentUser.userid = localStorage.get('userid')
-    if (!currentUser.userid) {
-        data_AddUser('test2@live.com', '123456', '32792')
-        
-    } else {
-        data_LogInUser('test2@live.com', '123456')
-    }
+ currentUser.email = localStorage.getItem('email')
+ currentUser.userid = localStorage.getItem('userid')
+   
     //EVENT HANDLERS 
     $(document).on('getWalmartItem', function (response) {
         console.log(response.message)
@@ -355,9 +351,10 @@ $(document).ready(function () {
         console.log(response.message)
     })
     $(document).on('addedUser', function (response) {
-        console.log(response.message)
-
-         data_LogInUser(response.message.email, '123456')
+        console.log(response.message.userid)
+        currentUser.userid = response.message.userid
+          data_LogInUser('llb@live.com', '123456789')
+           
     })
     $(document).on('getlists', function (response) {
         
@@ -370,11 +367,20 @@ $(document).ready(function () {
      var result = response.message
      console.log(result)
         currentUser.userid = result.userid
+           console.log(currentUser.userid)
         currentUser.email = result.email
-        localStorage.set('userid', currentUser.userid)
-        localStorage.set('email', currentUser.email)
+          console.log(currentUser.email)
+        localStorage.setItem('userid', currentUser.userid)
+        localStorage.setItem('email', currentUser.email)
         data_AddList(currentUser.userid, "test")
     })
+
+     if (typeof(localStorage.getItem('email')).startsWith("u")) {
+         data_AddUser('llb@live.com', '123456789', '32792')
+
+     } else {
+         data_LogInUser(localStorage.getItem('email'), '123456789')
+     }
     $(document).on('addedList', function (response) {
         console.log(response.message)
         data_GetLists(currentUser.userid)
@@ -383,7 +389,9 @@ $(document).ready(function () {
        
     })
     //FUNCTION TEST AREA
-    walmart_SearchItems('dozen white eggs')
+
+   
+    walmart_SearchItems('bread')
 
     walmart_GetItems({
         upc: '035000521019'

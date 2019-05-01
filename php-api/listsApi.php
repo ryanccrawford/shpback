@@ -24,9 +24,10 @@
             if($action === 'remove_lists'){
                 removeUsersLists($userid, $db);
             }  
+         respond($response);
         }
-            respond($response);
-    }
+           
+    
     // Add new list to database
     function addlist($userid, $listname, $database){
         global $response;

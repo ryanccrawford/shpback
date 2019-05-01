@@ -16,15 +16,7 @@
         if($action === 'auth_user'){
             $email = $data->email;
             $password = $data->password;
-            $result = authenticate($email,$password,$db);
-            if($result){
-                session_start();
-                $_SESSION['email'] = $email;
-                $response['success'] = array('userid',result.user_id);
-            }else{
-                $response['error'][] = array('message','authentification faild');
-            }
-            respond($response);
+            authenticate($email,$password,$db);
         }
         if($action === 'update_email'){
             $oldEmail = $data->email;
@@ -60,7 +52,7 @@
             $encrypt_password = md5($password);
             $sql = 'INSERT INTO '. USERS .' (email, password, created_on, zip) VALUES ("' . $email . '", "' . $encrypt_password . '", CURDATE(),"' . $zip . '")';
             $database->query($sql);
-            $response['users'] = array('code'=>200,'email'=>$email);
+            $response['userid'] = $database->getInsertedId();
             respond($response);
         }
         $response['error'][] = array('message'=>'user exist');
@@ -87,16 +79,20 @@
         respond($response);
     }
     function authenticate($email, $password, $database){
-
-        $sql = 'SELECT email FROM ' . USERS . ' WHERE email="$email" AND password="'.md5($password).'"';
+        global $response;
+        $sql = 'SELECT user_id, email FROM ' . USERS . ' WHERE email="'.$email.'" AND password="'.md5($password).'"';
         $database->query($sql);
         $result = $database->getResults();
         if($result == 0){
-            return false;
+           $response['error'] = array('message','faild');
         }else{
-            return $result;
+            $_SESSION["userid"] = $result[0]['user_id'];
+            $_SESSION["email"] = $email;
+            
+            $response['email'] = $email;
+            $response['userid'] = $result[0]['user_id'];
         }
-       
+       respond($response);
 
     }
     function updateUserEmail($old_email,$new_email,$password,$database){
@@ -135,7 +131,7 @@
 
     }
     function checkUserExisit($email, $database){
-        $sql = 'SELECT email FROM ' . USERS . ' WHERE email="$email" ';
+        $sql = 'SELECT email FROM ' . USERS . ' WHERE email="'.$email.'" ';
         $database->query($sql);
         $result = $database->getResults();
         if($result == 0){
