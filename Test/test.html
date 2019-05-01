@@ -2,10 +2,9 @@
 <html lang="en">
 
 <head>
-    <title>Title</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <title>SortA</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -14,7 +13,6 @@
 <body>
 
     <div class="card" style="width: 18rem;">
-        <img src="..." class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title">This is Editable
             </h5>
@@ -24,11 +22,10 @@
             </div>
             <form>
                 <div class="form-group">
-                    <label for="newItem">Next Item</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                        placeholder="Enter item">
+                    <label>Next Item</label>
+                    <input type="text" class="form-control" id="newItem" placeholder="Enter item">
                 </div>
-                <button type="submit" class="btn btn-primary" id='#addItem'>Submit</button>
+                <button type="submit" id='addItem'>Submit</button>
             </form>
 
         </div>
@@ -46,7 +43,19 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="app.js"></script>
+    <script src='app.js'></script>
+    <script>
+        $('#addItem').click(function () {
+            var item = $('<div>').append($('<p>'));
+            item = $('#newItem').val().trim();
+            // $.post('../searchusers.php',{search: search},function(response){
+            //     $('#userSearchResultsTable').html(response);
+            // });
+            console.log($('#newItem').val().trim())
+            $('.shoplist').text(item)
+
+        });
+    </script>
 
 </body>
 
