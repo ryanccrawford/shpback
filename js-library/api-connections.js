@@ -99,15 +99,17 @@ function data_AddUser(_email,_password,_zip) {
 }
 function data_LogInUser(_email, _password) {
     var endPoint = dataEnpoints.users
-    var url = walmartEnpoints.createEndpoint(endPoint, 'select', {
+    var url = dataEnpoints.createEndpoint(endPoint, 'auth_user')
+    var data = {
         email: _email,
         password: _password
-    })
+    }
     $.ajax({
-        type: "GET",
-        url: url
+        type: "POST",
+        url: url,
+        data: data
     }).then(function (response) {
-        isLoggedInEvent(response)   
+        isLoggedInEventHandel(response)
     });
 }
 
@@ -130,13 +132,15 @@ function data_AddList(_userid, _listname) {
 
 function data_RemoveList(_userid, _listid) {
     var endPoint = dataEnpoints.lists
-    var url = walmartEnpoints.createEndpoint(endPoint, 'remove_list', {
+    var url = dataEnpoints.createEndpoint(endPoint, 'remove_list')
+    var data = {
         userid: _userid,
         listid: _listid
-    })
+    }
     $.ajax({
-        type: "GET",
-        url: url
+        type: "POST",
+        url: url,
+        data: data
     }).then(function (response) {
         removeListEventHandel(response)
  });
@@ -159,7 +163,7 @@ function data_AddItem(_userid, _itemname, _categoryid, _categoryname, _listid) {
         addItemEventHandel(response)
     });
 }
-function data_GetItems(_userid, _listid) {
+function data_GetListItems(_userid, _listid) {
     var endPoint = dataEnpoints.listItems
     var url = dataEnpoints.createEndpoint(endPoint, 'get_items')
     var data = {
@@ -171,23 +175,23 @@ function data_GetItems(_userid, _listid) {
         url: url,
         data: data
     }).then(function (response) {
-        addItemEventHandel(response)
+        getItemsFromListEventHandel(response)
     });
 }
 
 function data_RemoveItem(_userid, _itemid, _listid) {
     var endPoint = dataEnpoints.listItems
-    var url = walmartEnpoints.createEndpoint(endPoint, 'select', {
+    var url = dataEnpoints.createEndpoint(endPoint, 'remove_item')
+    var data ={
         email: _email,
         password: _password
-    })
+    }
     $.ajax({
-        type: "GET",
-        url: url
+        type: "POST",
+        url: url,
+        data: data
     }).then(function (response) {
-        isLoggedInEvent(response)
-        response.
-        localStorage.setItem(userid, )
+        removeItemFromListEventHandel(response)
     });
 }
 //-----------------------------------EVENT HANDLERS-----------------------------
@@ -203,7 +207,13 @@ function addItemEventHandel(_data) {
         message: _data
     });
 }
-function removeItemEventHandel(_data) {
+function getItemsFromListEventHandel(_data) {
+    $.event.trigger({
+        type: "getItems",
+        message: _data
+    });
+}
+function removeItemFromListEventHandel(_data) {
     $.event.trigger({
         type: "removedItem",
         message: _data
@@ -227,6 +237,7 @@ function isLoggedInEventHandel(_data) {
          message: _data
      });
 }
+//WALMART API EVENT HANDELERS--------------------------------------------------------------
 function getItemEventHandel(_data) {
     $.event.trigger({
         type: "getWalmartItem",
@@ -268,20 +279,22 @@ function walmart_SearchItems(_query) {
       });
 }
 //SORT LIST----------------------------------------------------------------------------------------------------------
-function sorta_sort() {
-    
+function sortThatList() {
+    if (list.items.length > 1) {
+        list.items.sort(compareItems);
+    }
 }
-//TODO: NOT DONE
-function walmart_GetItemPrice(_item_id) {
-     $.ajax({
-         type: "GET",
-         url: "url",
-         data: "data",
-         dataType: "dataType"
-     }.then(function (response) {
+function compareItems(itema, itemb) {
+    if (itema.category < itemb.category) {
+        return -1
+    }
+    if (itema.category > itemb.category) {
+        return 1
+    }
+    return 0;
+}
 
-     }));
-}
+
 
 //---------------------------------------GOOGLE MAP APIS------------------------------------------
 //TODO: NOT DONE
@@ -304,7 +317,14 @@ var mapsApiRequest = function (_startLocation, _storeAddress, _method = 'DRIVING
 
 //Test area
 $(document).ready(function () {
-
+ currentUser.email = localStorage.get('email')
+ currentUser.userid = localStorage.get('userid')
+    if (!currentUser.userid) {
+        data_AddUser('test2@live.com', '123456', '32792')
+        
+    } else {
+        data_LogInUser('test2@live.com', '123456')
+    }
     //EVENT HANDLERS 
     $(document).on('getWalmartItem', function (response) {
         console.log(response.message)
@@ -314,15 +334,27 @@ $(document).ready(function () {
     })
     $(document).on('addedUser', function (response) {
         console.log(response.message)
-    })
 
+         data_LogInUser(response.message.email, '123456')
+    })
+    $(document).on('isLoggedIn', function (response) {
+     var result = response.message
+     console.log(result)
+        currentUser.userid = result.userid
+        currentUser.email = result.email
+        localStorage.set('userid', currentUser.userid)
+        localStorage.set('email', currentUser.email)
+
+ })
     //FUNCTION TEST AREA
     walmart_SearchItems('dozen white eggs')
 
     walmart_GetItems({
         upc: '035000521019'
     })
-
-    data_AddUser('test2@live.com','123456','32792')
+    
+    
+    
+   
     
 })
