@@ -1,5 +1,6 @@
 <?php
     function users($action,$data,$db){
+        global $response;
         if($action === 'insert'){
             $email = $data->email;
             $password = $data->password;
@@ -15,10 +16,11 @@
         if($action === 'auth_user'){
             $email = $data->email;
             $password = $data->password;
-            if(authenticate($email,$password,$db)){
+            $result = authenticate($email,$password,$db);
+            if($result){
                 session_start();
                 $_SESSION['email'] = $email;
-                $response['success'] = array('message','session started');
+                $response['success'] = array('userid',result.user_id);
             }else{
                 $response['error'][] = array('message','authentification faild');
             }
