@@ -2,40 +2,33 @@
 
     function lists($action,$data,$db){
         global $response;
-        $userid = isset($_SESSION['userid'])?$_SESSION['userid']:false;    
-        if(!$userid){
-            $response['error'][] = array('message','not logged in');
-        }else{
-            if($action === 'add_list' && $userid){
-                $name = isset($data->listname) ? $data->listname : null;
-                addUserList($userid,$listname,$listname,$db);
+        $listid = $data->listid;
+        $userid = $data->userid;
+            if($action === 'add_list'){
+                $name = isset($data->listname) ? $data->listname : '';
+                addlist($userid,$listname,$db);
             }
-            if($action === 'get_list' && $userid){
-                $listid = $data->listid;
+            if($action === 'get_list'){
                 getUserList($userid,$listid,$db);
             }
-            if($action === 'get_lists' && $userid){
+            if($action === 'get_lists'){
                 getUserLists($userid,$db);
             }
             if($action === 'update_list_name' && $userid){
                 $new_name = $data->listname;
-                $listid = $data->listid;
                 updateUserListName($userid,$listid,$new_name,$db);
             }
-            if($action === 'remove_list' && $userid){
-                $listid = $data->listid;
+            if($action === 'remove_list'){
                 removeUserList($userid, $listid, $db);
-                
             }
-            if($action === 'remove_lists' && $userid){
+            if($action === 'remove_lists'){
                 removeUsersLists($userid, $db);
-                
             }  
         }
             respond($response);
     }
     // Add new list to database
-    function addUserList($userid, $listname, $database){
+    function addlist($userid, $listname, $database){
         global $response;
         $sql = 'INSERT INTO '. LISTS .' (user_id, name, created_on) VALUES ($userid, "'. $listname .'", CURDATE())';
         $database->query($sql);
