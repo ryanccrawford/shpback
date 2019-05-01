@@ -69,7 +69,7 @@
     // Remove List from database
     function removeUserList($userid, $listid, $database){
         global $response;
-        $sql1 = 'INSERT INTO '. LISTS .' (user_id, name, created_on) VALUES ($userid, "'. $listname .'", CURDATE())';
+        $sql1 = 'DELETE FROM '. LISTS .' WHERE user_id=$user_id AND list_id=$listid';
         $database->query($sql1);
         $result1 = $database->getResults();
         if($result1){

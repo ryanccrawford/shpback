@@ -1,7 +1,15 @@
     
 const walmartApiKey = 'yetbamnvuptfsnzehnsz99nr'
 const googleApiKey = 'AIzaSyDiaHiIDgafsFhfwb1XQBtKETZ1zdlrP_o'
-const shoppingListApiKey = 'vtctfddr677666rtfcghh'
+const shoppingListApiKey = 'q98ejf-fqwefj-8wefqw8w'
+
+var userslists = [{
+    userid: null,
+    listid: null,
+    items: [{itemid:null,name:null,categoryid:null,category:null}]
+
+}];
+
 //---------------------------ENDPOINT OBJECTS---------------------------------
 var dataEnpoints = {
     createEndpoint: function (_endpoint,_action) {  
@@ -147,14 +155,9 @@ function walmart_SearchItems(_query) {
           getsSearchItemEventHandel(response)
       });
 }
-//TODO: NOT DONE
-function walmart_GetCategorys() {
-     $.ajax({
-         type: "GET",
-         url: url,
-     }.then(function (response) {
-
-     }));
+//SORT LIST----------------------------------------------------------------------------------------------------------
+function sorta_sort() {
+    
 }
 //TODO: NOT DONE
 function walmart_GetItemPrice(_item_id) {
@@ -208,6 +211,6 @@ $(document).ready(function () {
         upc: '035000521019'
     })
 
-    dataAddUser('ryanccrawford@live.com','123456','32792')
+    data_AddUser('test2@live.com','123456','32792')
     
 })
