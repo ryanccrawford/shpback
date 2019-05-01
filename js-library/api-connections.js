@@ -4,17 +4,20 @@ const googleApiKey = 'AIzaSyDiaHiIDgafsFhfwb1XQBtKETZ1zdlrP_o'
 const shoppingListApiKey = 'q98ejf-fqwefj-8wefqw8w'
 
 var userslists = [];
-var list = {
+var list = function () {
+    return {
     userid: null,
     listid: null,
     items: []
-
 }
-var item = {
-    itemid: null,
-    name: null,
-    categoryid: null,
-    category: null
+}
+var item = function () {
+    return {
+        itemid: null,
+        name: null,
+        categoryid: null,
+        category: null
+    }
 }
 var currentUser = {
     userid: null,
@@ -129,7 +132,20 @@ function data_AddList(_userid, _listname) {
         addListEventHandel(response)
     });
 }
-
+function data_GetLists(_userid) {
+    var endPoint = dataEnpoints.lists
+    var url = dataEnpoints.createEndpoint(endPoint, 'get_lists')
+    var data = {
+        userid: _userid
+    }
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data
+    }).then(function (response) {
+        addListEventHandel(response)
+    });
+}
 function data_RemoveList(_userid, _listid) {
     var endPoint = dataEnpoints.lists
     var url = dataEnpoints.createEndpoint(endPoint, 'remove_list')
@@ -228,6 +244,12 @@ function removeListEventHandel(_data) {
 function addListEventHandel(_data) {
     $.event.trigger({
         type: "addedList",
+        message: _data
+    });
+}
+function getListsEventHandel(_data) {
+    $.event.trigger({
+        type: "getLists",
         message: _data
     });
 }
@@ -337,6 +359,13 @@ $(document).ready(function () {
 
          data_LogInUser(response.message.email, '123456')
     })
+    $(document).on('getlists', function (response) {
+        
+        var tempList = response.message
+        console.log(tempList)
+
+       
+    })
     $(document).on('isLoggedIn', function (response) {
      var result = response.message
      console.log(result)
@@ -344,8 +373,15 @@ $(document).ready(function () {
         currentUser.email = result.email
         localStorage.set('userid', currentUser.userid)
         localStorage.set('email', currentUser.email)
+        data_AddList(currentUser.userid, "test")
+    })
+    $(document).on('addedList', function (response) {
+        console.log(response.message)
+        data_GetLists(currentUser.userid)
+        
 
- })
+       
+    })
     //FUNCTION TEST AREA
     walmart_SearchItems('dozen white eggs')
 
