@@ -14,13 +14,30 @@
 
     <div class="card" style="width: 18rem;">
         <div class="card-body">
-            <h5 class="card-title">This is Editable
-            </h5>
-            <p class="card-text">Make a new shopping list</p>
+            <h5 id='hidethis'>Make A New Shopping List!</h5>
 
-            <div class='shoplist'>
-            </div>
-            <form>
+            <form id='newListForm'>
+                <div>
+                    <input type="text" class="form-control" id="newList" placeholder="Enter New List">
+                </div>
+                <button type="submit" id='addList'>Submit</button>
+            </form>
+
+
+            <table class="table" style='display: none;'>
+                <span id='newListName'></span>
+                <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                    </tr>
+                </thead>
+
+                <tbody id='shoplist'>
+                </tbody>
+
+            </table>
+
+            <form id='listForm' style='display: none;'>
                 <div class="form-group">
                     <label>Next Item</label>
                     <input type="text" class="form-control" id="newItem" placeholder="Enter item">
@@ -44,18 +61,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src='app.js'></script>
-    <script>
-        $('#addItem').click(function () {
-            var item = $('<div>').append($('<p>'));
-            item = $('#newItem').val().trim();
-            // $.post('../searchusers.php',{search: search},function(response){
-            //     $('#userSearchResultsTable').html(response);
-            // });
-            console.log($('#newItem').val().trim())
-            $('.shoplist').text(item)
-
-        });
-    </script>
 
 </body>
 
