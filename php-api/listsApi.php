@@ -3,10 +3,15 @@
     function lists($action,$data,$db){
         global $response;
         $listid = $data->listid;
-        $userid = $data->userid;
+        $userid =  $data->userid;
+        $userid = intval($userid);
+        if(!$userid){
+            $response['auth'] = array('message','user not loggedin');
+            respond($response);
+        }
             if($action === 'add_list'){
-                $name = isset($data->listname) ? $data->listname : '';
-                addlist($userid,$listname,$db);
+                $name = $data->listname;
+                addlist($userid,$name,$db);
             }
             if($action === 'get_list'){
                 getUserList($userid,$listid,$db);
@@ -24,6 +29,9 @@
             if($action === 'remove_lists'){
                 removeUsersLists($userid, $db);
             }  
+            if($action === 'getAllListsForUser'){
+                getAllListsForUser($userid, $db);
+            }  
          respond($response);
         }
            
@@ -31,9 +39,12 @@
     // Add new list to database
     function addlist($userid, $listname, $database){
         global $response;
-        $sql = 'INSERT INTO '. LISTS .' (user_id, name, created_on) VALUES ($userid, "'. $listname .'", CURDATE())';
+        $sql = 'INSERT INTO '. LISTS .' (list_id, user_id, name, created_on) VALUES (NULL, $userid, "'. $listname .'", CURDATE())';
         $database->query($sql);
-        $response['listid'] = $database->insert_id;
+        $result = $database->getResults();
+
+        $response['listid'] = $database->getInsertedId();
+        respond($response);
     }
     // Get List from database kinda point less to have this
     function getUserList($userid, $listid, $database){
@@ -41,7 +52,8 @@
         $sql = 'SELECT * FROM '. LISTS .' WHERE user_id=$userid AND list_id=$listid';
         $database->query($sql);
         $result = $database->getResults();
-        $response['result'] = $result;
+        $response['list'] = $result;
+        respond($response);
     }
     // Get all users list
     function getUserLists($userid,$database){
@@ -49,7 +61,8 @@
         $sql = 'SELECT * FROM '. LISTS .' WHERE user_id=$userid';
         $database->query($sql);
         $result = $database->getResults();
-        $response['result'] = $result;
+        $response['lists'] = $result;
+        respond($response);
     }
     // Update List from database
     function updateUserListName($userid, $listid, $listname, $database){
@@ -58,6 +71,7 @@
         $database->query($sql);
         $result = $database->getResults();
         $response['result'] = $result;
+        respond($response);
 
     }
     // Remove List from database
@@ -76,6 +90,20 @@
         }else{
             $response['error'][] = array('message','delete faild');
         }
+        respond($response);
+    }
+    function getAllListsForUser($userid, $db){
+        global $response;
+      
+        $sql = 'SELECT * FROM users_lists inner JOIN list_items on users_lists.user_id=list_items.user_id WHERE users_lists.user_id=$userid';
+        $db->query($sql);
+        $data_lists = $db->getResults();
+        if(count($data_lists) > 0){
+            $response['lists'] = count($data_lists);
+            respond($response);
+        }
+        $response['list'] = array('message','No List');
+        respond($response);
     }
     // Remove all users Lists and items from database
     function removeUsersLists($userid, $database){

@@ -2,11 +2,13 @@
     
     function listitems($action,$data,$db){
         global $response;
-        $userid = isset($_SESSION['userid'])?$_SESSION['userid']:false;    
+        $listid = $data->listid;
+        $userid =  $_SESSION["userid"];
         if(!$userid){
-            $response['error'][] = array('message','not logged in');
+            $response['auth'] = array('message','user not loggedin');
+            respond($response);
         }else{
-            $listid = $data->listid;
+            
             if($action === 'add_item'){
                 addItem($userid, $listid, $db);
             }

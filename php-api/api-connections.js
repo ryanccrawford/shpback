@@ -4,21 +4,7 @@ const googleApiKey = 'AIzaSyDiaHiIDgafsFhfwb1XQBtKETZ1zdlrP_o'
 const shoppingListApiKey = 'q98ejf-fqwefj-8wefqw8w'
 
 var userslists = [];
-var list = function () {
-    return {
-    userid: null,
-    listid: null,
-    items: []
-}
-}
-var item = function () {
-    return {
-        itemid: null,
-        name: null,
-        categoryid: null,
-        category: null
-    }
-}
+
 var currentUser = {
     userid: null,
     email: null,
@@ -33,7 +19,7 @@ var dataEnpoints = {
     datahost: 'https://fe41a14.online-server.cloud',
     'apiKey': shoppingListApiKey,
     users: 'api.php?api=users&',
-    lists: 'api.php?api=list&',
+    lists: 'api.php?api=lists&',
     listItems: 'api.php?api=listItems&'
 }
 var walmartEnpoints = {
@@ -123,8 +109,8 @@ function data_AddList(_userid, _listname) {
     var endPoint = dataEnpoints.lists
     var url = dataEnpoints.createEndpoint(endPoint, 'add_list')
     var data = {
-        userid: _userid,
-        listname: _listname,
+        "userid": _userid,
+        "listname": _listname,
     }
     $.ajax({
         type: "POST",
@@ -185,8 +171,8 @@ function data_GetListItems(_userid, _listid) {
     var endPoint = dataEnpoints.listItems
     var url = dataEnpoints.createEndpoint(endPoint, 'get_items')
     var data = {
-        userid: _userid,
-        listid: _listid
+        "userid": _userid,
+        "listid": _listid
     }
     $.ajax({
         type: "POST",
@@ -201,8 +187,8 @@ function data_RemoveItem(_userid, _itemid, _listid) {
     var endPoint = dataEnpoints.listItems
     var url = dataEnpoints.createEndpoint(endPoint, 'remove_item')
     var data ={
-        email: _email,
-        password: _password
+        "email": _email,
+        "password": _password
     }
     $.ajax({
         type: "POST",
@@ -217,7 +203,7 @@ function data_GetAllListsForUser(_userid) {
     var endPoint = dataEnpoints.lists
     var url = dataEnpoints.createEndpoint(endPoint, 'getAllListsForUser')
     var data = {
-        userid: _userid
+        "userid": _userid
     }
     $.ajax({
         type: "POST",
@@ -397,12 +383,36 @@ var mapsApiRequest = function (_startLocation, _storeAddress, _method = 'DRIVING
     }
    
 }
+var shoppingLists = function (){ return{
+    lists : [],
+    addList:function(_name){
+       var l = new shoppingList(_name)
+       this.lists.push(l)
+    }
+
+}
+}
+var shoppingList = function(_listname){return {
+    name:_listname,
+    items: [],
+    addItem: function(_itemname){
+        var i = new shoppigItem(_itemname)
+        this.item.push(i)
+    }
+
+
+}
+}
+var shoppigItem = function(_itemname){return {
+    name:_itemname,
+   walmart_category_id: null,
+   walmart_category:''
+}
+}
 
 //Test area
 $(document).ready(function () {
- currentUser.email = localStorage.getItem('email')
- currentUser.userid = localStorage.getItem('userid')
-   
+    
     //EVENT HANDLERS 
     $(document).on('getWalmartItem', function (response) {
         console.log(response.message)
@@ -413,7 +423,7 @@ $(document).ready(function () {
     $(document).on('addedUser', function (response) {
         console.log(response.message.userid)
         currentUser.userid = response.message.userid
-          data_LogInUser('llb@live.com', '123456789')
+          data_LogInUser('llbccxxxxc@live.com', '123456789')
            
     })
     $(document).on('getlists', function (response) {
@@ -425,11 +435,11 @@ $(document).ready(function () {
     })
     $(document).on('isLoggedIn', function (response) {
         var result = response.message
-        console.log(result)
+        console.log("Is logging in result " + response.message)
            currentUser.userid = result.userid
-              console.log(currentUser.userid)
+              console.log("CurrentUser Var = " + currentUser.userid)
            currentUser.email = result.email
-             console.log(currentUser.email)
+             console.log("currentUser.email = " + currentUser.email)
            localStorage.setItem('userid', result.userid)
            localStorage.setItem('email',  result.email)
            currentUser.userid = result.userid
@@ -448,9 +458,32 @@ $(document).ready(function () {
     })
     //FUNCTION TEST AREA
  
-    data_LogInUser('ryanccrawford2@live.com', '12345678')
+  
+    var usersLists = new shoppingLists()
+    var si = new shoppigItem('eggs')
+    var si2 = new shoppigItem('cheese')
+    var si3 = new shoppigItem('hamburger meat')
+    var si4 = new shoppigItem('orange juice')
+    var list = new shoppingList('birthday party')
+    list.items.push(si)
+    list.items.push(si2)
+    list.items.push(si3)
+    list.items.push(si4)
+    usersLists.lists.push(list)
+    console.log(usersLists)
 
- 
+    currentUser.email = localStorage.getItem('email')
+    currentUser.userid = localStorage.getItem('userid')
+    console.log("ini currentUser.email = " + currentUser.email)
+    console.log("ini currentUser.userid = " + currentUser.userid)
+    if(currentUser.userid){
+        data_LogInUser('ryanccrawford2@live.com', '12345678')
+    }else{
+        data_AddUser('llbccxxxxc@live.com', '123456789')
+    }
+    
+    
+   
          
     
     

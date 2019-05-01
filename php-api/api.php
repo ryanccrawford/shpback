@@ -1,5 +1,6 @@
 <?php
 session_start();
+header("Access-Control-Allow-Origin: *");
 require_once('includes.php');
 //Check for api key
 if(get_param('apiKey') !== API_KEY){

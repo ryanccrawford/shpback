@@ -1,6 +1,7 @@
 <?php
     function users($action,$data,$db){
         global $response;
+        $is_auth = is_authenticated();
         if($action === 'insert'){
             $email = $data->email;
             $password = $data->password;
@@ -30,6 +31,10 @@
             $zip = $data->zip;
             updateUserZip($email,$password,$zip,$db);
         }
+        if($action === 'get_zip' && strlen($is_auth)){
+            $userid = $is_auth;
+            getUserZip($userid,$zip,$db);
+        }
        
     }
     // Add a new user to the database, sends the client a JSON message with results.
@@ -57,6 +62,19 @@
         }
         $response['error'][] = array('message'=>'user exist');
         respond($response);
+    }
+    function getUserZip($userid,$db){
+        global $response;
+        $sql = 'SELECT zip FROM ' . USERS . ' WHERE user_id=$userid';
+        $db->query($sql);
+        $result = $db->getResults();
+        if($result == 0){
+           $response['error'] = array('message','faild');
+        }else{
+            $_SESSION["zip"] = $result[0]['zip'];
+            $response['zip'] = $result[0]['zip'];
+        }
+       respond($response);
     }
     function updateUserZip($email, $password, $zip, $database){
         global $response;
@@ -94,6 +112,9 @@
         }
        respond($response);
 
+    }
+    function is_authenticated(){
+        return isset($_SESSION["userid"]) ? $_SESSION["userid"] : false;
     }
     function updateUserEmail($old_email,$new_email,$password,$database){
         global $response;

@@ -44,8 +44,11 @@ class database{
             while($row = $this->result->fetch_assoc()) {
                 $data[] = $row;
             }
+            $this->result->free();
             return $data;
+
         } else {
+            $this->result->free();
            return 0;
         }
     }
