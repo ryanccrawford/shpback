@@ -16,6 +16,11 @@ var item = {
     categoryid: null,
     category: null
 }
+var currentUser = {
+    userid: null,
+    email: null,
+    password:null
+}
 
 //---------------------------ENDPOINT OBJECTS---------------------------------
 var dataEnpoints = {
@@ -89,7 +94,7 @@ function data_AddUser(_email,_password,_zip) {
         url: url,
         data: data
     }).then(function (response) {
-        addedUserEvent(response)
+        addedUserEventHandel(response)
     });
 }
 function data_LogInUser(_email, _password) {
@@ -102,19 +107,121 @@ function data_LogInUser(_email, _password) {
         type: "GET",
         url: url
     }).then(function (response) {
+        isLoggedInEvent(response)   
+    });
+}
+
+//---------------------------PHP API LIST FUNCTIONS---------------------------
+function data_AddList(_userid, _listname) {
+    var endPoint = dataEnpoints.lists
+    var url = dataEnpoints.createEndpoint(endPoint, 'add_list')
+    var data = {
+        userid: _userid,
+        listname: _listname,
+    }
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data
+    }).then(function (response) {
+        addListEventHandel(response)
+    });
+}
+
+function data_RemoveList(_userid, _listid) {
+    var endPoint = dataEnpoints.lists
+    var url = walmartEnpoints.createEndpoint(endPoint, 'remove_list', {
+        userid: _userid,
+        listid: _listid
+    })
+    $.ajax({
+        type: "GET",
+        url: url
+    }).then(function (response) {
+        removeListEventHandel(response)
+ });
+}
+//---------------------------PHP API ITEM FUNCTIONS---------------------------
+function data_AddItem(_userid, _itemname, _categoryid, _categoryname, _listid) {
+    var endPoint = dataEnpoints.listItems
+    var url = dataEnpoints.createEndpoint(endPoint, 'add_item')
+    var data = {
+        userid: _userid,
+        categoryid: _categoryid,
+        categoryname: _categoryname,
+        listid: _listid
+    }
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data
+    }).then(function (response) {
+        addItemEventHandel(response)
+    });
+}
+function data_GetItems(_userid, _listid) {
+    var endPoint = dataEnpoints.listItems
+    var url = dataEnpoints.createEndpoint(endPoint, 'get_items')
+    var data = {
+        userid: _userid,
+        listid: _listid
+    }
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data
+    }).then(function (response) {
+        addItemEventHandel(response)
+    });
+}
+
+function data_RemoveItem(_userid, _itemid, _listid) {
+    var endPoint = dataEnpoints.listItems
+    var url = walmartEnpoints.createEndpoint(endPoint, 'select', {
+        email: _email,
+        password: _password
+    })
+    $.ajax({
+        type: "GET",
+        url: url
+    }).then(function (response) {
         isLoggedInEvent(response)
         response.
-        localStorage.setItem(userid,)
+        localStorage.setItem(userid, )
     });
 }
 //-----------------------------------EVENT HANDLERS-----------------------------
-function addedUserEvent(_data) {
+function addedUserEventHandel(_data) {
     $.event.trigger({
         type: "addedUser",
         message: _data
     });
 }
-function isLoggedInEvent(_data) {
+function addItemEventHandel(_data) {
+    $.event.trigger({
+        type: "addedItem",
+        message: _data
+    });
+}
+function removeItemEventHandel(_data) {
+    $.event.trigger({
+        type: "removedItem",
+        message: _data
+    });
+}
+function removeListEventHandel(_data) {
+    $.event.trigger({
+        type: "removedList",
+        message: _data
+    });
+}
+function addListEventHandel(_data) {
+    $.event.trigger({
+        type: "addedList",
+        message: _data
+    });
+}
+function isLoggedInEventHandel(_data) {
      $.event.trigger({
          type: "isLoggedIn",
          message: _data
