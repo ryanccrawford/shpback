@@ -3,12 +3,19 @@ const walmartApiKey = 'yetbamnvuptfsnzehnsz99nr'
 const googleApiKey = 'AIzaSyDiaHiIDgafsFhfwb1XQBtKETZ1zdlrP_o'
 const shoppingListApiKey = 'q98ejf-fqwefj-8wefqw8w'
 
-var userslists = [{
+var userslists = [];
+var list = {
     userid: null,
     listid: null,
-    items: [{itemid:null,name:null,categoryid:null,category:null}]
+    items: []
 
-}];
+}
+var item = {
+    itemid: null,
+    name: null,
+    categoryid: null,
+    category: null
+}
 
 //---------------------------ENDPOINT OBJECTS---------------------------------
 var dataEnpoints = {
@@ -19,9 +26,7 @@ var dataEnpoints = {
     'apiKey': shoppingListApiKey,
     users: 'api.php?api=users&',
     lists: 'api.php?api=list&',
-    listItems: 'api.php?api=listItems&',
-    items: 'api.php?api=items&'
-
+    listItems: 'api.php?api=listItems&'
 }
 var walmartEnpoints = {
     createEndpoint: function (_endpoint) {
@@ -98,10 +103,10 @@ function data_LogInUser(_email, _password) {
         url: url
     }).then(function (response) {
         isLoggedInEvent(response)
+        response.
+        localStorage.setItem(userid,)
     });
 }
-
-
 //-----------------------------------EVENT HANDLERS-----------------------------
 function addedUserEvent(_data) {
     $.event.trigger({
@@ -205,7 +210,7 @@ $(document).ready(function () {
     })
 
     //FUNCTION TEST AREA
-    walmart_SearchItems('eggs')
+    walmart_SearchItems('dozen white eggs')
 
     walmart_GetItems({
         upc: '035000521019'
