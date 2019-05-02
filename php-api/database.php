@@ -6,7 +6,7 @@ class database{
     private $password = "bootcamp1234";
     private $database = "admin_bootcamp";
     private $db;
-    private $result;
+    public $result;
     
 
    public function __construct(){
@@ -17,7 +17,10 @@ class database{
             respond($data);
         } 
     }
+    public function getInsertedId(){
 
+        return $this->db->insert_id;
+    }
    private function connect(){
         
         // Create database connection
@@ -41,15 +44,18 @@ class database{
             while($row = $this->result->fetch_assoc()) {
                 $data[] = $row;
             }
+            $this->result->free();
             return $data;
+
         } else {
+            $this->result->free();
            return 0;
         }
     }
 
     public function clean($string){
 
-        return $this->db::real_escape_string($string);
+        return $this->db->real_escape_string($string);
 
     }
 

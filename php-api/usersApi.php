@@ -1,5 +1,7 @@
 <?php
     function users($action,$data,$db){
+        global $response;
+        $is_auth = is_authenticated();
         if($action === 'insert'){
             $email = $data->email;
             $password = $data->password;
@@ -15,14 +17,7 @@
         if($action === 'auth_user'){
             $email = $data->email;
             $password = $data->password;
-            if(authenticate($email,$password,$db)){
-                session_start();
-                $_SESSION['email'] = $email;
-                $response['success'] = array('message','session started');
-            }else{
-                $response['error'][] = array('message','authentification faild');
-            }
-            respond($response);
+            authenticate($email,$password,$db);
         }
         if($action === 'update_email'){
             $oldEmail = $data->email;
@@ -35,6 +30,10 @@
             $password = $data->password;
             $zip = $data->zip;
             updateUserZip($email,$password,$zip,$db);
+        }
+        if($action === 'get_zip' && strlen($is_auth)){
+            $userid = $is_auth;
+            getUserZip($userid,$zip,$db);
         }
        
     }
@@ -58,11 +57,24 @@
             $encrypt_password = md5($password);
             $sql = 'INSERT INTO '. USERS .' (email, password, created_on, zip) VALUES ("' . $email . '", "' . $encrypt_password . '", CURDATE(),"' . $zip . '")';
             $database->query($sql);
-            $response['users'] = array('code'=>200,'email'=>$email);
+            $response['userid'] = $database->getInsertedId();
             respond($response);
         }
         $response['error'][] = array('message'=>'user exist');
         respond($response);
+    }
+    function getUserZip($userid,$db){
+        global $response;
+        $sql = 'SELECT zip FROM ' . USERS . ' WHERE user_id=$userid';
+        $db->query($sql);
+        $result = $db->getResults();
+        if($result == 0){
+           $response['error'] = array('message','faild');
+        }else{
+            $_SESSION["zip"] = $result[0]['zip'];
+            $response['zip'] = $result[0]['zip'];
+        }
+       respond($response);
     }
     function updateUserZip($email, $password, $zip, $database){
         global $response;
@@ -85,17 +97,24 @@
         respond($response);
     }
     function authenticate($email, $password, $database){
-
-        $sql = 'SELECT email FROM ' . USERS . ' WHERE email="$email" AND password="'.md5($password).'"';
+        global $response;
+        $sql = 'SELECT user_id, email FROM ' . USERS . ' WHERE email="'.$email.'" AND password="'.md5($password).'"';
         $database->query($sql);
         $result = $database->getResults();
         if($result == 0){
-            return false;
+           $response['error'] = array('message','faild');
         }else{
-            return $result;
+            $_SESSION["userid"] = $result[0]['user_id'];
+            $_SESSION["email"] = $email;
+            
+            $response['email'] = $email;
+            $response['userid'] = $result[0]['user_id'];
         }
-       
+       respond($response);
 
+    }
+    function is_authenticated(){
+        return isset($_SESSION["userid"]) ? $_SESSION["userid"] : false;
     }
     function updateUserEmail($old_email,$new_email,$password,$database){
         global $response;
@@ -133,7 +152,7 @@
 
     }
     function checkUserExisit($email, $database){
-        $sql = 'SELECT email FROM ' . USERS . ' WHERE email="$email" ';
+        $sql = 'SELECT email FROM ' . USERS . ' WHERE email="'.$email.'" ';
         $database->query($sql);
         $result = $database->getResults();
         if($result == 0){

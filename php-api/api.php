@@ -1,4 +1,6 @@
 <?php
+session_start();
+header("Access-Control-Allow-Origin: *");
 require_once('includes.php');
 //Check for api key
 if(get_param('apiKey') !== API_KEY){
@@ -6,11 +8,7 @@ if(get_param('apiKey') !== API_KEY){
     $error = array('error' => 'Invalid or missing Api Key');
     respond($error);
 }
-$response = array(
-    'meta' => array(
-        'apikey'=>'valid'
-    ),
-);
+$response = array();
 global $response;
 $datab = new database();
 
