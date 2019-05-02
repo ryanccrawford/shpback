@@ -12,14 +12,10 @@ $('document').ready(function () {
 
         $('#newList').val('');
 
-        $('#hidethis').text(listName);
+        $('#newlistname').text(listName);
 
         console.log(list);
 
-        $('.table').show();
-        $('#listForm').show();
-        $('#addList').hide();
-        $('#newList').hide();
     });
 
     $('#addItem').click(function (event) {

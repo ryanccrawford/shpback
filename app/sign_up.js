@@ -1,27 +1,30 @@
 //Create user account (Sign Up)
 $(document).ready(function () {
+
     //Grab user input
-    $("#new-user-btn").on("click", function (event) {
+    $("#signupBtn").on("click", function (event) {
         event.preventDefault();
         //Check if email is valid email format, name isn't blank, and zip code is 5 digits
-        if ($("#user-email-input").val() != '') {
-            var userEmail = $("#user-email-input").val().trim();
+        if ($("#email").val() != '') {
+            var email = $("#email").val().trim();
         }
-        if ($("#password-input").val() != '') {
-            var userPassword = $("#password-input").val().trim();
+        if ($("#password").val() != '') {
+            var password = $("#password").val().trim();
         }
-        if ($("#zipCode-input").val() != '') {
-            var userZipCode = $("#zipCode-input").val().trim();
+        if ($("#zipCode").val() != '') {
+            var zip = $("#zipCode").val().trim();
         }
 
-        function validateEmail(userEmail) {
+        //Validate email
+        function validateEmail(email) {
             var re = /\S+@\S+\.\S+/;
-            return re.test(userEmail);
+            return re.test(email);
         }
 
-        if (validateEmail(userEmail)) {
+        if (validateEmail(email)) {
 
-        data_AddUser(userEmail, userPassword, userZipCode);
+        //Push email to data
+        data_AddUser(email, password, zip);
         
         }
     })
