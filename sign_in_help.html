@@ -15,10 +15,35 @@
 
 
   <body>
+<!-- Nav Bar -->
+  <nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="index.html" class="brand-logo center"><img src="assets/SortA_white.png" alt="Logo" style="height:50px; width: 50px; margin-top: 10px;"></a>
+      <ul class="left hide-on-med-and-down">
+        <li><a href="about.html">About Us</a></li>
+      </ul>
+      <ul class="left hide-on-med-and-down">
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="signUpPage.html">Sign Up</a></li>
+      </ul>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="loginPage.html">Login</a></li>
+      </ul>
 
+      <ul id="nav-mobile" class="sidenav">
+        <li><a href="loginPage.html">Login In</a></li>
+        <li><a href="signUpPage.html">Sign Up</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+
+
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
     <div class="row">
-        <img src="assets/SortA_orangeS.png" alt="Logo" class="responsive-img valign profile-image-login left" style="width:100px; height:100px;">
-        <a href="loginPage.html"><button class="btn-large waves-effect waves-dark right" id="loginBtnRe" style="position: relative; top: 20px;">Login</button></a>
+       
     </div>
 
     <div class="row">
@@ -27,8 +52,8 @@
           <div class="col s12 m6 offset-m3">
             <div class="card">
 
-              <div class="center">
-                <h3>Welcome!</h3>
+              <div class="center" >
+                <h3 style="padding-top: 10px; font-size: 32px">Recover Your Account</h3>
               </div>
 
               <div class="card-content">
@@ -37,29 +62,18 @@
                     <label for="Email">Email Address</label>
                     <input type="text" id="email">
                 </div><br>
-
                 <div class="form-field">
-                    <label for="password">Password</label>
-                    <input type="password" id="password"> 
+                  <a href="#confirmation" class="modal-trigger"><button class="btn-large waves-effect waves-dark orange" id="signupBtn" style="width:100%">Submit</button></a>
                 </div><br>
 
-                <div class="form-field">
-                    <label for="zipCode">Zip Code</label>
-                    <input type="text" id="zipCode"> 
-                </div><br>
-
-                <div class="form-field">
-                  <a href="#confirmation" class="modal-trigger"><button class="btn-large waves-effect waves-dark" id="signupBtn" style="width:100%">Create Account</button></a>
-                </div><br>
-
-                <div class="modal" id="confirmation">
+                <div class="modal" id="confirmation" style="height:200px">
+                   <div class="modal-header">
+                        <a href="loginPage.html" class="modal-close btn orange right">X</a>
+                    </div>
                     <div class="modal-content center">
-                        <img src="images/stockPhotoTwo.png" alt="Email Photo">
-                        <p>Email Verification Sent</p>
+                        <p style="font-size: 24px; margin-top: 50px">Email Verification Sent</p>
                     </div>
-                    <div class="modal-footer">
-                        <a href="#" class="modal-close btn orange">Close Pop-Up</a>
-                    </div>
+                   
                 </div>
 
               </div>

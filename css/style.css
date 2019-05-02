@@ -12,3 +12,8 @@
 .icon-block .material-icons {
 	font-size: inherit;
 }
+.section {
+  background-repeat: no-repeat;
+  background-size: 100%;
+  margin-top: 2px;
+}
