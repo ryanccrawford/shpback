@@ -1,54 +1,84 @@
 <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <title>User Interface</title>
-      <!-- Compiled and minified CSS -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-      <!-- Font Library -->
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  </head>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>User Interface</title>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <!-- Font Library -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
 
 
-  <body>
-      
-    <ul id="slide-out" class="sidenav sidenav-fixed" >
-        <div class="row center" style="position:relative; top:30px;">
-            <img src="assets/SortA_orangeS.png" alt="Logo" class="responsive-img valign profile-image-login" style="width:50px; height:50px;">
-        </div>
+<body>
 
-        <div class="row">
-            <li><a href="#!">First Sidebar Link</a></li>
-            <li><a href="#!">Second Sidebar Link</a></li>
-            <i class="material-icons">menu</i>
-        </div>
+  <nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="index.html" class="brand-logo center"><img
+          src="assets/SortA_white.png" alt="Logo" style="height:50px; width: 50px; margin-top: 10px;"></a>
+      <ul class="left hide-on-med-and-down">
+        <li><a href="#">About Us</a></li>
+      </ul>
+      <ul class="left hide-on-med-and-down">
+        <li><a href="#">Contact</a></li>
+      </ul>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="signUpPage.html">Sign Up</a></li>
+      </ul>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="loginPage.html">Login</a></li>
+      </ul>
 
-      <div class="row">
-        <a href="loginPage.html"><button class="btn-large waves-effect waves-dark right light-blue lighten-1" id="logOutBtn" style="position: relative; bottom: -250px; right: 80px;">Sign Out</button></a>
-      </div>
-    </ul>
-    
-      <div class="row">
-        <div class="col s12 m6">
-          <div class="card blue-grey darken-1">
-            <div class="card-content white-text">
-              <span class="card-title">Card Title</span>
-              <p>I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively.</p>
+      <ul id="nav-mobile" class="sidenav">
+        <li><a href="#">Login In</a></li>
+        <li><a href="#">Sign Up</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+
+
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+
+  <div class="row">
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">
+            <div class="row">
+              <div class="input-field col s6">
+                <input value="Grocery List 1" id="first_name2" type="text" class="validate">
+                <label class="active" for="first_name2">List Name</label>
+              </div>
             </div>
-            <div class="card-action">
-              <a href="#">This is a link</a>
-              <a href="#">This is a link</a>
-            </div>
+
+          </span>
+          <div class="row">
+            <form class="col s12">
+              <div class="row">
+                <div class="input-field col s12">
+                  <textarea id="textarea1" class="materialize-textarea"></textarea>
+                  <label for="textarea1">Textarea</label>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
+        <div class="card-action">
+          <a href="#">Sort List</a>
+        </div>
       </div>
-           
+    </div>
+  </div>
 
-    <script src="https://code.jquery.com/jquery-3.4.0.slim.min.js" integrity="sha256-ZaXnYkHGqIhqTbJ6MB4l9Frs/r7U4jlx7ir8PJYBqbI=" crossorigin="anonymous"></script>
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-  </body>
+  <script src="https://code.jquery.com/jquery-3.4.0.slim.min.js"
+    integrity="sha256-ZaXnYkHGqIhqTbJ6MB4l9Frs/r7U4jlx7ir8PJYBqbI=" crossorigin="anonymous"></script>
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+</body>
+
 </html>
